@@ -1,0 +1,16 @@
+我建立了一个loginserver的项目，项目里有一个login的app，这个项目目前的配置是用sqlite，数据库这个先不管，做完以后再考虑迁移到mysql
+
+1.在\loginserver\login 下有个views.py ，我先写了一个def index(request)函数 在浏览器里输入http://127.0.0.1:8000/login/，应该可以看到输出test ok
+
+下面我介绍一下我写的一个例子：
+
+2.在\loginserver\login 下有个models.py, 里我建立了两个数据模型 User 和UserCtpAccount，UserCtpAccount有一个User的外键当做自己的主键
+3.在\loginserver\login 下有个views.py里，def login(request)函数是处理http://127.0.0.1:8000/login/lg这个链接的，这个链接里我其实做get和post两种方式的处理，
+其实兼容两种处理的方式很简单 在函数一开始我request.POST.get和request.GET.get取出需要的数据就可以了，所以在浏览器中测试的时候
+就可以使用http://127.0.0.1:8000/login/lg?password=11&&username=sdfasdf 这样的链接条直接来处理了，因为测试时候你用post不方便，所以我兼容了下get和post两种方式
+这个login函数非常简单，先从get里取出用户名密码，如果用户名空我就用 字典建立一个返回消息，然后用json.dumps返回一个json字符串给浏览器
+如果get里有用户名我通过User.objects.get从数据库里找出这个用户名的user对象，判断密码是不是和发上来的一样，如果一样我会调用getUserCtpAccount这个函数，
+这个函数其实就是通过找到的user对象，查找UserCtpAccount对象，然后返回一个字典，最后把这个字典用jason输出
+
+
+这个例子和本项目无关，只是让你熟悉下基本操作，本次项目的基本所有知识，在这个例子里就够用了
